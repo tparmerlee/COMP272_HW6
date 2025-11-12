@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Tristan Parmerlee / COMP 272-002
  *
  *   This java file contains the problem solutions for the methods lastBoulder,
  *   showDuplicates, and pair methods. You should utilize the Java Collection
@@ -10,7 +10,6 @@
  ********************************************************************/
 
 import java.util.*;
-import java.util.PriorityQueue;
 
 public class ProblemSolutions {
 
@@ -65,10 +64,25 @@ public class ProblemSolutions {
 
   public static int lastBoulder(int[] boulders) {
 
-      //
-      // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME / SECTION # ABOVE
-      //
-      return -1;
+    // create maxHeap by inverting priority
+    java.util.PriorityQueue<Integer> maxHeap = new java.util.PriorityQueue<>(Collections.reverseOrder());
+    for (int i : boulders){
+        maxHeap.add(i);
+    }
+    // play the game
+    while(!maxHeap.isEmpty()){
+        int heaviest = maxHeap.poll();
+        int secondHeaviest = maxHeap.poll();
+        if (heaviest != secondHeaviest){
+            int remaining = heaviest - secondHeaviest;
+            maxHeap.add(remaining);
+        }
+        if (maxHeap.size() == 1){
+            return maxHeap.poll();
+        }
+    }
+
+    return 0;
   }
 
 
@@ -91,10 +105,27 @@ public class ProblemSolutions {
 
     public static ArrayList<String> showDuplicates(ArrayList<String> input) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure result is sorted in ascending order
+        // Use tree map to count number of unique strings and sort
+        TreeMap<String, Integer> map = new TreeMap<>();
+        for (String s : input){
+            if (map.containsKey(s)){
+                map.put(s, map.get(s)+1);
+            } else{
+                map.put(s, 1);
+            }
+        }
+
+        // add elements with multiple instances to return array
+        ArrayList<String> returnArray = new ArrayList<>();
+        Iterator<String> iterator = map.keySet().iterator();
+        while(iterator.hasNext()){
+            String s = iterator.next();
+            if (map.get(s) > 1){
+                returnArray.add(s);
+            }
+        }
+
+        return returnArray;  // Make sure result is sorted in ascending order
 
     }
 
@@ -110,7 +141,7 @@ public class ProblemSolutions {
      *        between pairs in ascending order. E.g.,
      *
      *         - Ordering within a pair:
-     *            A string is a pair in the format "(a, b)", where a and b are
+     *            A string is a pair in the format "(a, b)", where a and b are 
      *            ordered lowest to highest, e.g., if a pair was the numbers
      *            6 and 3, then the string would be "(3, 6)", and NOT "(6, 3)".
      *         - Ordering between pairs:
@@ -131,9 +162,20 @@ public class ProblemSolutions {
 
     public static ArrayList<String> pair(int[] input, int k) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure returned lists is sorted as indicated above
+        // add elements of input to a set to avoid duplicates (tree set to give ordering)
+        TreeSet<Integer> set = new TreeSet<>();
+        for (int i : input){
+            set.add(i);
+        }
+
+        ArrayList<String> returnArray = new ArrayList<>();
+        for (int j : set){
+            // add unique element to array list iff k-j is also in the set
+            if(set.contains(k-j) && j <= k-j){
+                returnArray.add(String.format("(%d, %d)", j, k-j));
+            }
+        }
+
+        return returnArray;  // Make sure returned lists is sorted as indicated above
     }
 }

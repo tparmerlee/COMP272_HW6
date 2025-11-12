@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Tristan Parmerlee / COMP 272-002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -151,8 +151,12 @@ class PriorityQueue<E, P> {
 
     public Node add(E e, P priority) {
 
-        // YOUR CODE GOES HERE
-        return null;
+        Node addNode = new Node(e, priority, size());
+        tree.add(addNode);
+
+        pullUp(addNode.idx);
+
+        return addNode;
     }
 
 
@@ -168,7 +172,12 @@ class PriorityQueue<E, P> {
 
     public boolean contains(E e) {
 
-        // ADD YOUR CODE HERE
+        for (Node n : tree) {
+            if (n.value.equals(e)){
+                return true;
+            }
+        } 
+
         return false;
     }
 
